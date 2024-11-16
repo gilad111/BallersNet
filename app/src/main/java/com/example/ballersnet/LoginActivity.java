@@ -2,6 +2,7 @@ package com.example.ballersnet;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
 
         public void onActivityResult(ActivityResult result) {
+            Log.d("onActivityResult",result.toString());
+
             if (result.getResultCode() == RESULT_OK) {
                 Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
                 try {
@@ -81,7 +84,10 @@ public class LoginActivity extends AppCompatActivity {
         name = findViewById(R.id.nameTV);
         mail = findViewById(R.id.mailTV);
 
-        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.client_id)).requestEmail().build() ;
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.client_id))
+                .requestEmail()
+                .build();
         googleSignInClient = GoogleSignIn.getClient(LoginActivity.this,options);
         auth = FirebaseAuth.getInstance() ;
         SignInButton signInButton = findViewById(R.id.signIn) ;
