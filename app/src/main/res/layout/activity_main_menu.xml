@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_main_menu"
+        android:title="Main Menu"
+        app:showAsAction="ifRoom" />
+    <!--<item
+        android:id="@+id/action_player_profile"
+        android:title="Player Profile"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_team_profile"
+        android:title="Team Profile"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_player_search"
+        android:title="Player Search"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_team_search"
+        android:title="Team Search"
+        app:showAsAction="ifRoom" />-->
+</menu>

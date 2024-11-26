@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BallersNet</string>
     <!-- Strings used for fragments for navigation -->
-    <string name = "client_id">596609515802-6hck17mug5hjl868b8d54rv5r10d0rbu.apps.googleusercontent.com</string>
+    <string name="client_id">596609515802-6hck17mug5hjl868b8d54rv5r10d0rbu.apps.googleusercontent.com</string>
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
