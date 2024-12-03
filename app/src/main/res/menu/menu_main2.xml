@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_main_menu2"
+        android:title="Main Menu"
+        android:orderInCategory="100" />
+    <item
+        android:id="@+id/action_player_profile"
+        android:title="Player Profile" />
+    <item
+        android:id="@+id/action_team_profile"
+        android:title="Team Profile" />
+    <item
+        android:id="@+id/action_player_search"
+        android:title="Player Search" />
+    <item
+        android:id="@+id/action_team_search"
+        android:title="Team Search" />
+</menu>
