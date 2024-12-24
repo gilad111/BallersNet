@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "ברוכים הבאים לעמוד הראשי של BallersNet", Toast.LENGTH_SHORT).show();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("BallersNet");
+        toolbar.setTitle("Ballers Net");
        // toolbar.setLogo(R.drawable.app_logo);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -43,10 +43,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.e("error", "|**************");
         getMenuInflater().inflate(R.menu.menu_main2, menu);
         return true;
 
     }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
