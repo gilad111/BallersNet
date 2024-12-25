@@ -25,18 +25,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        Toast.makeText(this, "ברוכים הבאים לעמוד הראשי של BallersNet", Toast.LENGTH_SHORT).show();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Ballers Net");
        // toolbar.setLogo(R.drawable.app_logo);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_main), (v, insets) -> {
-           // Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-          //  v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-          //  return insets;
-       // });
         }
 
 
@@ -53,11 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
-        if (item.getItemId() == R.id.action_main_menu2) {
-            intent = new Intent(this, MainMenu.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.action_player_search) {
+        if (item.getItemId() == R.id.action_player_search) {
             intent = new Intent(this, PlayerSearch.class);
             startActivity(intent);
             return true;
@@ -69,7 +57,12 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, TeamSearch.class);
             startActivity(intent);
             return true;
-        } else if (item.getItemId() == android.R.id.home) {
+        } else if( item.getItemId() == R.id.action_player_profile) {
+            intent = new Intent(this, PlayerProfile.class);
+            startActivity(intent);
+            return true;
+        }
+        else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         } else {

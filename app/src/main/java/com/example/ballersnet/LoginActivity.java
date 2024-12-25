@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Glide.with(LoginActivity.this).load(Objects.requireNonNull(auth.getCurrentUser()).getPhotoUrl()).into(imageView);
                                 name.setText(auth.getCurrentUser().getDisplayName());
                                 mail.setText(auth.getCurrentUser().getEmail());
-                                Toast.makeText(LoginActivity.this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "ברוכים הבאים לעמוד הראשי של BallersNet", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                                 intent.putExtra("USERNAME",auth.getCurrentUser().getDisplayName());
 
