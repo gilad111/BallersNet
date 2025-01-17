@@ -26,6 +26,9 @@
             android:name=".PlayerProfile"
             android:exported="false" />
         <activity
+            android:name=".UserProfileUpdateActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.BallersNet">

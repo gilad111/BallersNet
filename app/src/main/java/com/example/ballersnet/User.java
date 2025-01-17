@@ -1,7 +1,7 @@
 package com.example.ballersnet;
 
 public class User {
-    public String userId, name, email, profileImage, teamName, spot ;
+    public String userId, name, email, profileImage, teamName, spot, city ;
     public int age ;
     public double avg ;
     public boolean isAdmin ;
@@ -9,7 +9,7 @@ public class User {
     // Default constructor required for Firebase
     public User() {}
 
-    public User(String userId, String name, String email, String profileImage, String teamName, int age, String spot, double avg, boolean isAdmin) {
+    public User(String userId, String name, String email, String profileImage, String teamName, int age, String spot, double avg, boolean isAdmin, String city) {
         this.userId = userId;
         this.name = name;
         this.teamName = teamName;
@@ -19,9 +19,10 @@ public class User {
         this.isAdmin = isAdmin ;
         this.email = email;
         this.profileImage = profileImage;
+        this.city = city ;
     }
 
     public User(String userId, String name, String email, String profileImage) {
-        this(userId, name, email, profileImage, "", -1, "", -1, false);
+        this(userId, name, email, profileImage, "", -1, "", -1, false, "");
     }
 }

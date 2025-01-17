@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, PlayerProfile.class);
             startActivity(intent);
             return true;
+        } else if( item.getItemId() == R.id.activity_user_profile_update) {
+            intent = new Intent(this, UserProfileUpdateActivity.class);
+            startActivity(intent);
+            return true;
         }
         else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
