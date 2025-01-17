@@ -31,6 +31,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.Objects;
 
@@ -39,40 +41,60 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient googleSignInClient;
     ShapeableImageView imageView;
     TextView name, mail;
-    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
 
-        public void onActivityResult(ActivityResult result) {
-            Log.d("onActivityResult",result.toString());
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                        try {
+                            GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
+                            AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
 
-            if (result.getResultCode() == RESULT_OK) {
-                Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                try {
-                    GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
-                    AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
-                    auth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                auth = FirebaseAuth.getInstance();
-                                Glide.with(LoginActivity.this).load(Objects.requireNonNull(auth.getCurrentUser()).getPhotoUrl()).into(imageView);
-                                name.setText(auth.getCurrentUser().getDisplayName());
-                                mail.setText(auth.getCurrentUser().getEmail());
-                                Toast.makeText(LoginActivity.this, "ברוכים הבאים לעמוד הראשי של BallersNet", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                intent.putExtra("USERNAME",auth.getCurrentUser().getDisplayName());
+                            auth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    auth = FirebaseAuth.getInstance();
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Failed to sign in: " + task.getException(), Toast.LENGTH_SHORT).show();
-                            }
+                                    // Create a custom User object
+                                    User user = new User(
+                                            userId,
+                                            auth.getCurrentUser().getDisplayName(),
+                                            auth.getCurrentUser().getEmail(),
+                                            auth.getCurrentUser().getPhotoUrl() != null ? auth.getCurrentUser().getPhotoUrl().toString() : ""
+                                    );
+
+                                    // Save user info to Firebase Realtime Database
+                                    database.getReference("Users").child(userId).setValue(user);
+
+                                    // Load profile data
+                                    Glide.with(LoginActivity.this)
+                                            .load(Objects.requireNonNull(auth.getCurrentUser()).getPhotoUrl())
+                                            .into(imageView);
+
+                                    name.setText(auth.getCurrentUser().getDisplayName());
+                                    mail.setText(auth.getCurrentUser().getEmail());
+
+                                    Toast.makeText(LoginActivity.this, "Sign in successful!", Toast.LENGTH_SHORT).show();
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("USERNAME", auth.getCurrentUser().getDisplayName());
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Failed to sign in: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (ApiException e) {
+                            e.printStackTrace();
                         }
-                    });
-                } catch (ApiException e) {
-                    e.printStackTrace();
+                    }
                 }
             }
-        }
-    });
+    );
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,15 +110,14 @@ public class LoginActivity extends AppCompatActivity {
                 .requestIdToken(getString(R.string.client_id))
                 .requestEmail()
                 .build();
-        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this,options);
-        auth = FirebaseAuth.getInstance() ;
-        SignInButton signInButton = findViewById(R.id.signIn) ;
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = googleSignInClient.getSignInIntent() ;
-                activityResultLauncher.launch(intent) ;
-            }
+
+        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, options);
+        auth = FirebaseAuth.getInstance();
+
+        SignInButton signInButton = findViewById(R.id.signIn);
+        signInButton.setOnClickListener(view -> {
+            Intent intent = googleSignInClient.getSignInIntent();
+            activityResultLauncher.launch(intent);
         });
     }
 }
