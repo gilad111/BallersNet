@@ -25,7 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class UserProfileUpdateActivity extends AppCompatActivity {
+public class UserProfileUpdateActivity extends MainActivity {
     private EditText usernameEditText, emailEditText, profilePictureUrlEditText;
     private EditText preferredPositionEditText, ageEditText, averagePointsEditText, cityEditText;
     private CheckBox isTeamManagerCheckBox;
