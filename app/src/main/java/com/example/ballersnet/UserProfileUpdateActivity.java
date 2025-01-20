@@ -38,6 +38,7 @@ public class UserProfileUpdateActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_update);
 
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
