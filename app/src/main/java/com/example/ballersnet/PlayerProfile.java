@@ -26,7 +26,7 @@ public class PlayerProfile extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_profile);
-
+        Toast.makeText(this, "פרופיל שחקן", Toast.LENGTH_SHORT).show();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Player Profile");
         setSupportActionBar(toolbar);

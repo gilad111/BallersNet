@@ -37,7 +37,7 @@ public class UserProfileUpdateActivity extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_update);
-
+        Toast.makeText(this, "עדכון פרטי שחקן", Toast.LENGTH_SHORT).show();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Update Profile");
         setSupportActionBar(toolbar);
