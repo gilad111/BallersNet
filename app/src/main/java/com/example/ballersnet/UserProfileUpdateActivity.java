@@ -38,6 +38,9 @@ public class UserProfileUpdateActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_update);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Update Profile");
+        setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
