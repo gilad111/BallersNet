@@ -21,7 +21,11 @@ public class PlayerSearch extends MainActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_player_search);
+
+        // Display a toast message
         Toast.makeText(this, "חיפוש שחקן", Toast.LENGTH_SHORT).show();
+
+        // Set up toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Player Search");
         setSupportActionBar(toolbar);

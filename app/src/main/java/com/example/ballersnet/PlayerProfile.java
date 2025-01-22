@@ -15,10 +15,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+// PlayerProfile מציג את פרטי השחקן ויורש מ-MainActivity
 public class PlayerProfile extends MainActivity {
 
+    // הגדרת משתנים לתצוגת פרטי השחקן
     private TextView usernameTextView, emailTextView, ageTextView, cityTextView;
     private TextView preferredPositionTextView, averagePointsTextView;
+    // משתנים לאימות והתחברות למסד הנתונים
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
@@ -27,18 +30,23 @@ public class PlayerProfile extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_profile);
         Toast.makeText(this, "פרופיל שחקן", Toast.LENGTH_SHORT).show();
+        // הגדרת ה-Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Player Profile");
         setSupportActionBar(toolbar);
 
+        // אתחול הרכיבים הגרפיים
         initializeViews();
 
+        // אתחול Firebase Auth ו-Database
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        // טעינת נתוני השחקן
         loadPlayerData();
     }
 
+    // אתחול הרכיבים הגרפיים
     private void initializeViews() {
         usernameTextView = findViewById(R.id.usernameTextView);
         emailTextView = findViewById(R.id.emailTextView);
@@ -48,6 +56,7 @@ public class PlayerProfile extends MainActivity {
         averagePointsTextView = findViewById(R.id.averagePointsTextView);
     }
 
+    // טעינת נתוני השחקן מ-Firebase
     private void loadPlayerData() {
         if (mAuth.getCurrentUser() == null) {
             Toast.makeText(PlayerProfile.this, "No user logged in", Toast.LENGTH_SHORT).show();
@@ -61,6 +70,7 @@ public class PlayerProfile extends MainActivity {
                 if (dataSnapshot.exists()) {
                     User user = dataSnapshot.getValue(User.class);
                     if (user != null) {
+                        // הצגת נתוני המשתמש בתצוגה
                         usernameTextView.setText("Username: " + user.userId);
                         emailTextView.setText("Email: " + user.email);
                         ageTextView.setText("Age: " + user.age);

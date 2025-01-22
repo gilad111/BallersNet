@@ -36,25 +36,29 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.Objects;
 
+// LoginActivity handles user authentication using Google Sign-In
 public class LoginActivity extends AppCompatActivity {
     FirebaseAuth auth;
     GoogleSignInClient googleSignInClient;
     ShapeableImageView imageView;
     TextView name, mail;
-
+    // ActivityResultLauncher for handling Google Sign-In result
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK) {
+                        // Handle successful sign-in
                         Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
                         try {
                             GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
                             AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
 
+                            // Authenticate with Firebase
                             auth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
+                                    // Authentication successful
                                     auth = FirebaseAuth.getInstance();
                                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
@@ -79,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                                     mail.setText(auth.getCurrentUser().getEmail());
 
                                     Toast.makeText(LoginActivity.this, "Sign in successful!", Toast.LENGTH_SHORT).show();
+                                    // Start MainActivity
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("USERNAME", auth.getCurrentUser().getDisplayName());
@@ -101,11 +106,15 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        // Initialize Firebase
         FirebaseApp.initializeApp(this);
+
+        // Initialize UI elements
         imageView = findViewById(R.id.profileImage);
         name = findViewById(R.id.nameTV);
         mail = findViewById(R.id.mailTV);
 
+        // Configure Google Sign-In
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.client_id))
                 .requestEmail()
@@ -114,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, options);
         auth = FirebaseAuth.getInstance();
 
+        // Set up sign-in button
         SignInButton signInButton = findViewById(R.id.signIn);
         signInButton.setOnClickListener(view -> {
             Intent intent = googleSignInClient.getSignInIntent();

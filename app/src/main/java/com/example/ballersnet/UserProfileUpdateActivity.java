@@ -25,32 +25,40 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+// UserProfileUpdateActivity extends MainActivity and handles user profile updates
 public class UserProfileUpdateActivity extends MainActivity {
+    // UI elements for user input
     private EditText usernameEditText, emailEditText, profilePictureUrlEditText;
     private EditText preferredPositionEditText, ageEditText, averagePointsEditText, cityEditText;
     private CheckBox isTeamManagerCheckBox;
     private Button saveButton;
+    // Firebase authentication and database references
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set the layout for this activity
         setContentView(R.layout.activity_user_profile_update);
+        // Display a toast message
         Toast.makeText(this, "עדכון פרטי שחקן", Toast.LENGTH_SHORT).show();
+        // Set up the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Update Profile");
         setSupportActionBar(toolbar);
-
+        // Initialize Firebase instances
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         initializeViews();
+        // Load user data from Firebase
         loadUserData();
 
+        // Set click listener for save button
         saveButton.setOnClickListener(v -> updateUserProfile());
     }
-
+    // Method to initialize UI elements
     private void initializeViews() {
         usernameEditText = findViewById(R.id.usernameEditText);
         emailEditText = findViewById(R.id.emailEditText);
@@ -62,7 +70,7 @@ public class UserProfileUpdateActivity extends MainActivity {
         isTeamManagerCheckBox = findViewById(R.id.isTeamManagerCheckBox);
         saveButton = findViewById(R.id.saveButton);
     }
-
+    // Method to load user data from Firebase
     private void loadUserData() {
         String userId = mAuth.getCurrentUser().getUid();
         Log.e("error", userId);
@@ -71,6 +79,7 @@ public class UserProfileUpdateActivity extends MainActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
+                    // Populate UI elements with user data
                     usernameEditText.setText(user.userId);
                     emailEditText.setText(user.email);
                     profilePictureUrlEditText.setText(user.profileImage);
@@ -88,9 +97,10 @@ public class UserProfileUpdateActivity extends MainActivity {
             }
         });
     }
-
+    // Method to update user profile in Firebase
     private void updateUserProfile() {
         String userId = mAuth.getCurrentUser().getUid();
+        // Get values from UI elements
         String username = usernameEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
         String profilePictureUrl = profilePictureUrlEditText.getText().toString().trim();
@@ -100,8 +110,10 @@ public class UserProfileUpdateActivity extends MainActivity {
         String city = cityEditText.getText().toString().trim();
         boolean isTeamManager = isTeamManagerCheckBox.isChecked();
 
+        // Create updated User object
         User updatedUser = new User(userId, username, email, profilePictureUrl, "Ramat HaSharon", age, preferredPosition, averagePoints, isTeamManager, city);
 
+        // Update user data in Firebase
         mDatabase.child("Users").child(userId).setValue(updatedUser)
                 .addOnSuccessListener(aVoid -> Toast.makeText(UserProfileUpdateActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(UserProfileUpdateActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show());

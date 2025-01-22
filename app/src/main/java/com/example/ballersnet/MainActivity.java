@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+// MainActivity serves as the main screen of the application
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        // Set up toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Ballers Net");
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu
         Log.e("error", "|**************");
         getMenuInflater().inflate(R.menu.menu_main2, menu);
         return true;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
+        // Handle menu item clicks
         if (item.getItemId() == R.id.action_player_search) {
             intent = new Intent(this, PlayerSearch.class);
             startActivity(intent);
