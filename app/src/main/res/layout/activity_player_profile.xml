@@ -7,7 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -25,50 +26,62 @@
             android:id="@+id/usernameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Username :"
-            android:layout_marginBottom="16dp"/>
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="16dp"
+            android:hint="Username"/>
 
         <TextView
             android:id="@+id/emailTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Email :"
-            android:layout_marginBottom="16dp"/>
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="16dp"
+            android:hint="Email"/>
 
-        <TextView
-            android:id="@+id/profilePictureUrlTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Profile Picture URL :"
-            android:layout_marginBottom="16dp"/>
 
         <TextView
             android:id="@+id/preferredPositionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Prefered Position :"
-            android:layout_marginBottom="16dp"/>
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="16dp"
+            android:hint="Preferred Position"/>
 
         <TextView
             android:id="@+id/ageTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Age :"
-            android:layout_marginBottom="16dp"/>
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="16dp"
+            android:hint="Age"/>
 
         <TextView
             android:id="@+id/averagePointsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Average Points :"
-            android:layout_marginBottom="16dp"/>
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="16dp"
+            android:hint="Average Points"/>
 
         <TextView
             android:id="@+id/cityTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="City :"
-            android:layout_marginBottom="16dp"/>
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="16dp"
+            android:hint="City"/>
 
 
     </LinearLayout>
