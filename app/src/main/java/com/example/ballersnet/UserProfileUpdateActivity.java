@@ -86,6 +86,7 @@ public class UserProfileUpdateActivity extends MainActivity {
                     preferredPositionEditText.setText(user.spot);
                     ageEditText.setText(String.valueOf(user.age));
                     averagePointsEditText.setText(String.valueOf(user.avg));
+                    Log.e("error", String.valueOf(user.city));
                     cityEditText.setText(user.city);
                     isTeamManagerCheckBox.setChecked(true);
                 }

@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                                     String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
                                     // Create a custom User object
+                                   // to add the values from the db to the user object
                                     User user = new User(
                                             userId,
                                             auth.getCurrentUser().getDisplayName(),
