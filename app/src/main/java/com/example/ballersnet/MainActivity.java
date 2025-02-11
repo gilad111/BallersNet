@@ -12,6 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 // MainActivity serves as the main screen of the application
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if( item.getItemId() == R.id.activity_user_profile_update) {
             intent = new Intent(this, UserProfileUpdateActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else if (item.getItemId() == R.id.action_log_out) {
+            intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             return true;
         }
