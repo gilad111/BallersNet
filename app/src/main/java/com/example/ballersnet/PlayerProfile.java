@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 public class PlayerProfile extends MainActivity {
 
     // הגדרת משתנים לתצוגת פרטי השחקן
-    private TextView usernameTextView, emailTextView, ageTextView, cityTextView;
+    private TextView nameTextView, emailTextView, ageTextView, cityTextView;
     private TextView preferredPositionTextView, averagePointsTextView;
     // משתנים לאימות והתחברות למסד הנתונים
     private FirebaseAuth mAuth;
@@ -48,7 +48,7 @@ public class PlayerProfile extends MainActivity {
 
     // אתחול הרכיבים הגרפיים
     private void initializeViews() {
-        usernameTextView = findViewById(R.id.usernameTextView);
+        nameTextView = findViewById(R.id.nameTextView);
         emailTextView = findViewById(R.id.emailTextView);
         ageTextView = findViewById(R.id.ageTextView);
         cityTextView = findViewById(R.id.cityTextView);
@@ -71,7 +71,7 @@ public class PlayerProfile extends MainActivity {
                     User user = dataSnapshot.getValue(User.class);
                     if (user != null) {
                         // הצגת נתוני המשתמש בתצוגה
-                        usernameTextView.setText("Username: " + user.userId);
+                        nameTextView.setText("name: " + mAuth.getCurrentUser().getDisplayName());
                         emailTextView.setText("Email: " + user.email);
                         ageTextView.setText("Age: " + user.age);
                         cityTextView.setText("City: " + user.city);

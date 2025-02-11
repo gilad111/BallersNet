@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 // UserProfileUpdateActivity extends MainActivity and handles user profile updates
 public class UserProfileUpdateActivity extends MainActivity {
     // UI elements for user input
-    private EditText usernameEditText, emailEditText, profilePictureUrlEditText;
+    private EditText nameEditText, emailEditText, profilePictureUrlEditText;
     private EditText preferredPositionEditText, ageEditText, averagePointsEditText, cityEditText;
     private CheckBox isTeamManagerCheckBox;
     private Button saveButton;
@@ -60,7 +60,7 @@ public class UserProfileUpdateActivity extends MainActivity {
     }
     // Method to initialize UI elements
     private void initializeViews() {
-        usernameEditText = findViewById(R.id.usernameEditText);
+        nameEditText = findViewById(R.id.nameEditText);
         emailEditText = findViewById(R.id.emailEditText);
         profilePictureUrlEditText = findViewById(R.id.profilePictureUrlEditText);
         preferredPositionEditText = findViewById(R.id.preferredPositionEditText);
@@ -80,7 +80,7 @@ public class UserProfileUpdateActivity extends MainActivity {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
                     // Populate UI elements with user data
-                    usernameEditText.setText(user.userId);
+                    nameEditText.setText(mAuth.getCurrentUser().getDisplayName());
                     emailEditText.setText(user.email);
                     profilePictureUrlEditText.setText(user.profileImage);
                     preferredPositionEditText.setText(user.spot);
@@ -102,7 +102,7 @@ public class UserProfileUpdateActivity extends MainActivity {
     private void updateUserProfile() {
         String userId = mAuth.getCurrentUser().getUid();
         // Get values from UI elements
-        String username = usernameEditText.getText().toString().trim();
+        String name = nameEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
         String profilePictureUrl = profilePictureUrlEditText.getText().toString().trim();
         String preferredPosition = preferredPositionEditText.getText().toString().trim();
@@ -112,7 +112,7 @@ public class UserProfileUpdateActivity extends MainActivity {
         boolean isTeamManager = isTeamManagerCheckBox.isChecked();
 
         // Create updated User object
-        User updatedUser = new User(userId, username, email, profilePictureUrl, "Ramat HaSharon", age, preferredPosition, averagePoints, isTeamManager, city);
+        User updatedUser = new User(userId, name, email, profilePictureUrl, "Ramat HaSharon", age, preferredPosition, averagePoints, isTeamManager, city);
 
         // Update user data in Firebase
         mDatabase.child("Users").child(userId).setValue(updatedUser)
