@@ -63,17 +63,18 @@ public class LoginActivity extends AppCompatActivity {
                                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
-                                    // Create a custom User object
-                                   // to add the values from the db to the user object
-                                    User user = new User(
-                                            userId,
-                                            auth.getCurrentUser().getDisplayName(),
-                                            auth.getCurrentUser().getEmail(),
-                                            auth.getCurrentUser().getPhotoUrl() != null ? auth.getCurrentUser().getPhotoUrl().toString() : ""
-                                    );
+                                    // if the user doesn't have a profile, Create a new User object
+                                    if(auth.getCurrentUser().getDisplayName() == null) {
+                                        User user = new User(
+                                                userId,
+                                                auth.getCurrentUser().getDisplayName(),
+                                                auth.getCurrentUser().getEmail(),
+                                                auth.getCurrentUser().getPhotoUrl() != null ? auth.getCurrentUser().getPhotoUrl().toString() : ""
+                                        );
 
-                                    // Save user info to Firebase Realtime Database
-                                    database.getReference("Users").child(userId).setValue(user);
+                                        // Save user info to Firebase Realtime Database
+                                        database.getReference("Users").child(userId).setValue(user);
+                                    }
 
                                     // Load profile data
                                     Glide.with(LoginActivity.this)
