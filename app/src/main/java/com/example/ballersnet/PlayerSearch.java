@@ -39,7 +39,7 @@ public class PlayerSearch extends MainActivity {
         // הגדרת ה-RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         playerList = new ArrayList<>();
-        adapter = new PlayerAdapter(playerList, this::onMessageButtonClick);
+        adapter = new PlayerAdapter(playerList, this::onMessageButtonClick,this);
         recyclerView.setAdapter(adapter);
 
         // אתחול הפניה למסד הנתונים
@@ -110,5 +110,12 @@ public class PlayerSearch extends MainActivity {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    public void updatePlayerTeamStatus(String playerId, boolean isInTeam) {
+        DatabaseReference playerRef = FirebaseDatabase.getInstance().getReference("Users").child(playerId);
+        playerRef.child("isInMyTeam").setValue(isInTeam)
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Player team status updated", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to update player team status", Toast.LENGTH_SHORT).show());
     }
 }

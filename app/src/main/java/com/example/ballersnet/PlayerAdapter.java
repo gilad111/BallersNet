@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -15,12 +17,14 @@ import java.util.List;
 public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> implements Filterable {
     private List<User> playerList; // רשימת השחקנים המוצגת
     private List<User> playerListFull; // רשימה מלאה של כל השחקנים
+    private PlayerSearch playerSearch;
     private OnMessageClickListener messageClickListener;
 
     // קונסטרקטור מעודכן
-    public PlayerAdapter(List<User> playerList, OnMessageClickListener listener) {
+    public PlayerAdapter(List<User> playerList, OnMessageClickListener listener,PlayerSearch playerSearch) {
         this.playerList = new ArrayList<>(playerList); // יצירת עותק חדש
         this.playerListFull = new ArrayList<>(playerList); // יצירת עותק נוסף לרשימה המלאה
+        this.playerSearch = playerSearch;
         this.messageClickListener = listener;
     }
 
@@ -36,15 +40,6 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     public PlayerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_player, parent, false);
         return new PlayerViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull PlayerViewHolder holder, int position) {
-        User player = playerList.get(position);
-        holder.nameTextView.setText(player.name);
-        holder.ageTextView.setText(String.valueOf(player.age));
-        holder.positionTextView.setText(player.spot);
-        holder.messageButton.setOnClickListener(v -> messageClickListener.onMessageClick(player));
     }
 
     @Override
@@ -90,6 +85,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     public class PlayerViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView, ageTextView, positionTextView;
         Button messageButton;
+        CheckedTextView isInTeamCheckTextView;
 
         public PlayerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,7 +93,32 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
             ageTextView = itemView.findViewById(R.id.playerAgeTextView);
             positionTextView = itemView.findViewById(R.id.playerPositionTextView);
             messageButton = itemView.findViewById(R.id.messageButton);
+            isInTeamCheckTextView = itemView.findViewById(R.id.isInTeamCheckTextView);
+
+            // Set up click listener for the CheckedTextView
+            isInTeamCheckTextView.setOnClickListener(v -> {
+                isInTeamCheckTextView.toggle();
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    User player = playerList.get(position);
+                    player.setInMyTeam(isInTeamCheckTextView.isChecked());
+                   playerSearch.updatePlayerTeamStatus(player.userId, player.isInMyTeam());
+                }
+            });
+
         }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull PlayerViewHolder holder, int position) {
+        User player = playerList.get(position);
+        holder.nameTextView.setText(player.name);
+        holder.ageTextView.setText(String.valueOf(player.age));
+        holder.positionTextView.setText(player.spot);
+        holder.messageButton.setOnClickListener(v -> messageClickListener.onMessageClick(player));
+
+        // Set the checked state of the CheckedTextView
+        holder.isInTeamCheckTextView.setChecked(player.isInMyTeam());
     }
 
     public interface OnMessageClickListener {

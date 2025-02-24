@@ -40,6 +40,15 @@
             android:layout_marginTop="8dp"
             android:text="שלח הודעה"/>
 
+        <CheckedTextView
+            android:id="@+id/isInTeamCheckTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Is this player in my team?"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="false" />
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
