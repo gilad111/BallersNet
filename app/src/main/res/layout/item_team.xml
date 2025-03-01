@@ -22,7 +22,7 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/teamLocationTextView"
+            android:id="@+id/homeCourtLocationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"/>

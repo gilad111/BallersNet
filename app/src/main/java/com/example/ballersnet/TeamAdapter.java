@@ -40,7 +40,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
     public void onBindViewHolder(@NonNull TeamViewHolder holder, int position) {
         Team team = teamList.get(position);
         holder.nameTextView.setText(team.name);
-        holder.locationTextView.setText(team.location);
+        holder.homeCourtLocationTextView.setText(team.homeCourtLocation);
         holder.descriptionTextView.setText(team.description);
         holder.joinButton.setOnClickListener(v -> joinTeamClickListener.onJoinTeamClick(team));
     }
@@ -65,7 +65,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (Team team : teamListFull) {
                     if ((team.name != null && team.name.toLowerCase().contains(filterPattern)) ||
-                            (team.location != null && team.location.toLowerCase().contains(filterPattern))) {
+                            (team.homeCourtLocation != null && team.homeCourtLocation.toLowerCase().contains(filterPattern))) {
                         filteredList.add(team);
                     }
                 }
@@ -85,13 +85,13 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
     };
 
     public class TeamViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView, locationTextView, descriptionTextView;
+        TextView nameTextView, homeCourtLocationTextView, descriptionTextView;
         Button joinButton;
 
         public TeamViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.teamNameTextView);
-            locationTextView = itemView.findViewById(R.id.teamLocationTextView);
+            homeCourtLocationTextView = itemView.findViewById(R.id.homeCourtLocationTextView);
             descriptionTextView = itemView.findViewById(R.id.teamDescriptionTextView);
             joinButton = itemView.findViewById(R.id.joinTeamButton);
         }

@@ -88,7 +88,7 @@ public class UserProfileUpdateActivity extends MainActivity {
                     averagePointsEditText.setText(String.valueOf(user.avg));
                     Log.e("error", String.valueOf(user.city));
                     cityEditText.setText(user.city);
-                    isTeamManagerCheckBox.setChecked(true);
+                    isTeamManagerCheckBox.setChecked(user.isAdmin);
                 }
             }
 

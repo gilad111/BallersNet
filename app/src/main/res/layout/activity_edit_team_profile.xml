@@ -19,61 +19,72 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-
-
-        <TextView
-            android:id="@+id/teamNameTextView"
+        <EditText
+            android:id="@+id/teamNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Team Name:"
-            android:layout_marginBottom="16dp"/>
+            android:hint="Team Name"
+            android:inputType="text"
+            android:layout_marginTop="16dp" />
 
-        <TextView
-            android:id="@+id/homeCourtTextView"
+        <EditText
+            android:id="@+id/homeCourtEditText"
             android:layout_width="match_parent"
-            android:text="Home Court Location:"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
+            android:hint="Home Court Location"
+            android:inputType="text"
+            android:layout_marginTop="16dp" />
 
-        <TextView
-            android:id="@+id/recordTextView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:text="Record:"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
 
-        <TextView
-            android:id="@+id/neededPositionsTextView"
-            android:layout_width="match_parent"
-            android:text="Needed Positions:"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/winsEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Wins"
+                android:inputType="number" />
 
-        <TextView
-            android:id="@+id/managerNameTextView"
+            <EditText
+                android:id="@+id/lossesEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Losses"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/neededPositionsEditText"
             android:layout_width="match_parent"
-            android:text="Manager Name:"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:hint="Needed Positions (comma separated)"
+            android:inputType="text"
+            android:layout_marginTop="16dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Team Players:"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginTop="16dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/playersRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp" />
 
         <Button
-            android:id="@+id/editButton"
+            android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edit Team Profile"/>
+            android:text="Save Changes"
+            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 </ScrollView>

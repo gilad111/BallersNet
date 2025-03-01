@@ -5,6 +5,7 @@ public class User {
     public int age ;
     public double avg ;
     public boolean isAdmin ;
+    public String teamId;
     private boolean isInMyTeam;
 
 
