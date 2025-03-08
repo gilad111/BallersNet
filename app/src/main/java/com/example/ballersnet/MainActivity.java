@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, PlayerSearch.class);
             startActivity(intent);
             return true;
+        }
+        else if (item.getItemId() == R.id.action_create_team) {
+            intent = new Intent(this, CreateTeamActivity.class);
+            startActivity(intent);
+            return true;
         } else if (item.getItemId() == R.id.action_team_profile) {
             intent = new Intent(this, TeamProfile.class);
             startActivity(intent);
