@@ -97,10 +97,8 @@ public class EditTeamProfileActivity extends AppCompatActivity {
         String[] neededPositions = neededPositionsEditText.getText().toString().split(",");
 
         // Create updated Team object
-        Team updatedTeam = new Team(teamName, homeCourt, wins, losses,
-                new ArrayList<>(Arrays.asList(neededPositions)),
-                mAuth.getCurrentUser().getDisplayName());
-
+        // Team updatedTeam = new Team(teamName, homeCourt, wins, losses, "", mAuth.getCurrentUser().getDisplayName());
+        Team updatedTeam = new Team();
 
         // Update team data in Firebase
         mDatabase.child("Teams").child(teamId).setValue(updatedTeam)

@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +92,13 @@ public class TeamSearch extends MainActivity {
 
     // פונקציה לטיפול בלחיצה על כפתור ההצטרפות לקבוצה
     private void onJoinTeamButtonClick(Team team) {
-        // כאן תוכל להוסיף לוגיקה לשליחת בקשת הצטרפות לקבוצה
-        Toast.makeText(this, "Requested to join " + team.name, Toast.LENGTH_SHORT).show();
+        // Get current user ID
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Update user's team ID in Firebase
+        FirebaseDatabase.getInstance().getReference("Users").child(userId).child("teamName").setValue(team.name)
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Joined team successfully", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to join team", Toast.LENGTH_SHORT).show());
     }
 }
+

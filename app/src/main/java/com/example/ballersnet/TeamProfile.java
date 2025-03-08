@@ -29,43 +29,53 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-// TeamProfile מציג את פרטי הקבוצה ויורש מ-MainActivity
-public class TeamProfile extends MainActivity {
+// TeamProfile displays team details and inherits from AppCompatActivity
+public class TeamProfile extends AppCompatActivity {
+    // UI components
     private TextView teamNameTextView, homeCourtTextView, recordTextView, neededPositionsTextView, managerNameTextView;
     private RecyclerView playersRecyclerView;
     private Button editButton;
+
+    // Firebase authentication and database references
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private String teamId;
+
+    // Team name and whether the user is a manager
+    private String teamName;
     private boolean isManager = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        // אתחול Firebase
+        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // מגדיר את הלייאאוט של המסך
+        // Set the layout for this activity
         setContentView(R.layout.activity_team_profile);
 
-        // אתחול הרכיבים הגרפיים
-        initializeViews();
-
-        // טעינת נתוני הקבוצה
-        loadTeamData();
-        // מאפשר תצוגה מקצה לקצה
-        EdgeToEdge.enable(this);
-        // מציג הודעת טוסט קצרה
-        Toast.makeText(this, "פרופיל קבוצות", Toast.LENGTH_SHORT).show();
-        // מאתחל את ה-Toolbar
+        // Initialize the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Team Profile");
-        // מגדיר את ה-Toolbar כ-ActionBar של האפליקציה
         setSupportActionBar(toolbar);
+
+        // Initialize UI components
+        initializeViews();
+
+        // Load team data
+        loadTeamData();
+
+        // Enable edge-to-edge display
+        EdgeToEdge.enable(this);
+
+        // Show a toast message
+        Toast.makeText(this, "Team Profile", Toast.LENGTH_SHORT).show();
+
+
     }
+
+    // Initialize UI components
     private void initializeViews() {
         teamNameTextView = findViewById(R.id.teamNameTextView);
         homeCourtTextView = findViewById(R.id.homeCourtLocationTextView);
@@ -75,11 +85,12 @@ public class TeamProfile extends MainActivity {
         playersRecyclerView = findViewById(R.id.playersRecyclerView);
         editButton = findViewById(R.id.editButton);
 
+        // Set click listener for the edit button
         editButton.setOnClickListener(v -> {
             if (isManager) {
-                // פתיחת מסך עריכה
+                // Open edit team profile activity if user is a manager
                 Intent intent = new Intent(TeamProfile.this, EditTeamProfileActivity.class);
-                intent.putExtra("teamId", teamId);
+                intent.putExtra("teamName", teamName);
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Only team managers can edit", Toast.LENGTH_SHORT).show();
@@ -87,6 +98,7 @@ public class TeamProfile extends MainActivity {
         });
     }
 
+    // Load team data by first fetching the user's team name
     private void loadTeamData() {
         String userId = mAuth.getCurrentUser().getUid();
         mDatabase.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -94,9 +106,9 @@ public class TeamProfile extends MainActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
-                    teamId = user.teamId;
+                    teamName = user.teamName; // Assuming teamName is stored in User class
                     isManager = user.isAdmin;
-                    loadTeamDetails();
+                    loadTeamDetails(teamName); // Load team details using the team name
                 }
             }
 
@@ -107,18 +119,17 @@ public class TeamProfile extends MainActivity {
         });
     }
 
-    private void loadTeamDetails() {
-        String teamId = mAuth.getCurrentUser().getUid();
-        if (teamId == null) {
-            Toast.makeText(this, "No team associated with this user", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        mDatabase.child("Teams").child(teamId).addListenerForSingleValueEvent(new ValueEventListener() {
+    // Load team details from the database
+    private void loadTeamDetails(String teamName) {
+        Toast.makeText(TeamProfile.this, "Team name is " + teamName, Toast.LENGTH_SHORT).show();
+        mDatabase.child("Teams").orderByChild("name").equalTo(teamName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Team team = dataSnapshot.getValue(Team.class);
-                if (team != null) {
-                    updateUI(team);
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Team team = child.getValue(Team.class);
+                    if (team != null) {
+                        updateUI(team); // Update the UI with team details
+                    }
                 }
             }
 
@@ -129,20 +140,21 @@ public class TeamProfile extends MainActivity {
         });
     }
 
+    // Update the UI with team details
     private void updateUI(Team team) {
-        teamNameTextView.setText(team.name);
-        homeCourtTextView.setText("Home Court: " + team.homeCourtLocation);
+        teamNameTextView.setText("Team Name: " + team.name);
+//        homeCourtTextView.setText("b");
         recordTextView.setText("Record: " + team.wins + "-" + team.losses);
         neededPositionsTextView.setText("Needed Positions: " + String.join(", ", team.neededPositions));
         managerNameTextView.setText("Manager: " + team.managerName);
 
-        // הגדרת מתאם לרשימת השחקנים
-        PlayerListAdapter adapter = new PlayerListAdapter(team.playerIds);
-        playersRecyclerView.setAdapter(adapter);
-        playersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Set up the player list adapter
+//        PlayerListAdapter adapter = new PlayerListAdapter(team.playerIds);
+//        playersRecyclerView.setAdapter(adapter);
+//        playersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    // מתאם לרשימת השחקנים
+    // Adapter for the player list
     private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.PlayerViewHolder> {
         private List<String> playerIds;
 
@@ -171,7 +183,7 @@ public class TeamProfile extends MainActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // טיפול בשגיאה
+                    // Handle database error
                 }
             });
         }
