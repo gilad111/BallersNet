@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -21,7 +20,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     private OnMessageClickListener messageClickListener;
 
     // קונסטרקטור מעודכן
-    public PlayerAdapter(List<User> playerList, OnMessageClickListener listener,PlayerSearch playerSearch) {
+    public PlayerAdapter(List<User> playerList, OnMessageClickListener listener, PlayerSearch playerSearch) {
         this.playerList = new ArrayList<>(playerList); // יצירת עותק חדש
         this.playerListFull = new ArrayList<>(playerList); // יצירת עותק נוסף לרשימה המלאה
         this.playerSearch = playerSearch;
@@ -83,7 +82,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     };
 
     public class PlayerViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView, ageTextView, positionTextView;
+        TextView nameTextView, ageTextView, positionTextView, playerAveragePointsTextView, playerCityTextView;
         Button messageButton;
         CheckedTextView isInTeamCheckTextView;
 
@@ -92,6 +91,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
             nameTextView = itemView.findViewById(R.id.playerNameTextView);
             ageTextView = itemView.findViewById(R.id.playerAgeTextView);
             positionTextView = itemView.findViewById(R.id.playerPositionTextView);
+            playerAveragePointsTextView = itemView.findViewById(R.id.playerAveragePointsTextView);
+            playerCityTextView = itemView.findViewById(R.id.playerCityTextView);
             messageButton = itemView.findViewById(R.id.messageButton);
             isInTeamCheckTextView = itemView.findViewById(R.id.isInTeamCheckTextView);
 
@@ -102,10 +103,9 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
                 if (position != RecyclerView.NO_POSITION) {
                     User player = playerList.get(position);
                     player.setInMyTeam(isInTeamCheckTextView.isChecked());
-                   playerSearch.updatePlayerTeamStatus(player.userId, player.isInMyTeam());
+                    playerSearch.updatePlayerTeamStatus(player.userId, player.isInMyTeam());
                 }
             });
-
         }
     }
 
@@ -113,8 +113,11 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     public void onBindViewHolder(@NonNull PlayerViewHolder holder, int position) {
         User player = playerList.get(position);
         holder.nameTextView.setText(player.name);
-        holder.ageTextView.setText(String.valueOf(player.age));
-        holder.positionTextView.setText(player.spot);
+        holder.positionTextView.setText("Position: " + player.spot);
+        holder.ageTextView.setText("Age: " + player.age);
+        holder.playerAveragePointsTextView.setText("Average Points: " + player.avg);
+        holder.playerCityTextView.setText("City: " + player.city);
+
         holder.messageButton.setOnClickListener(v -> messageClickListener.onMessageClick(player));
 
         // Set the checked state of the CheckedTextView
