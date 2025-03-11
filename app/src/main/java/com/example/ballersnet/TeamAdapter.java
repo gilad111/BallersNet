@@ -85,14 +85,15 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
     };
 
     public class TeamViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView, homeCourtLocationTextView, descriptionTextView;
+        TextView nameTextView, homeCourtLocationTextView, descriptionTextView, neededPositionsTextView;;
         Button joinButton;
 
         public TeamViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.teamNameTextView);
             homeCourtLocationTextView = itemView.findViewById(R.id.homeCourtLocationTextView);
-            descriptionTextView = itemView.findViewById(R.id.teamDescriptionTextView);
+            neededPositionsTextView = itemView.findViewById(R.id.neededPositionsTextView);
+            //descriptionTextView = itemView.findViewById(R.id.teamDescriptionTextView);
             joinButton = itemView.findViewById(R.id.joinTeamButton);
         }
     }
