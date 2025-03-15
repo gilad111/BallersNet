@@ -5,12 +5,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
-public class CreateTeamActivity extends AppCompatActivity {
+public class CreateTeamActivity extends MainActivity {
 
     // UI elements
     private EditText teamNameEditText, homeCourtEditText, neededPositionsEditText;
@@ -24,6 +26,11 @@ public class CreateTeamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_team);
+        // Set up the toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Create Team");
+        setSupportActionBar(toolbar);
+        Toast.makeText(this, "Create Team", Toast.LENGTH_SHORT).show();
 
         // Initialize Firebase instances
         mAuth = FirebaseAuth.getInstance();

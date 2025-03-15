@@ -12,8 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 // TeamProfile displays team details and inherits from AppCompatActivity
-public class TeamProfile extends AppCompatActivity {
+public class TeamProfile extends MainActivity {
     // UI components
     private TextView teamNameTextView, homeCourtTextView, recordTextView, neededPositionsTextView, managerNameTextView;
     private RecyclerView playersRecyclerView;
@@ -47,12 +47,6 @@ public class TeamProfile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize Firebase
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        // Set the layout for this activity
         setContentView(R.layout.activity_team_profile);
 
         // Initialize the toolbar
@@ -60,15 +54,19 @@ public class TeamProfile extends AppCompatActivity {
         toolbar.setTitle("Team Profile");
         setSupportActionBar(toolbar);
 
+
         // Initialize UI components
         initializeViews();
+
+        // Initialize Firebase
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Load team data
         loadTeamData();
 
         // Enable edge-to-edge display
-        EdgeToEdge.enable(this);
-
+        //EdgeToEdge.enable(this);
         // Show a toast message
         Toast.makeText(this, "Team Profile", Toast.LENGTH_SHORT).show();
 
