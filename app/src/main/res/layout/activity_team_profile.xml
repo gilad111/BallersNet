@@ -30,9 +30,9 @@
             android:layout_marginBottom="16dp"/>
 
         <TextView
-            android:id="@+id/homeCourtTextView"
+            android:id="@+id/CourtTextView"
             android:layout_width="match_parent"
-            android:text="Home Court Location:"
+            android:text="Home Court:"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"/>
 
@@ -64,11 +64,14 @@
             android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/playersRecyclerView"
+        <TextView
+            android:id="@+id/PlayersListTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:text=""
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
 
         <Button
             android:id="@+id/editButton"
