@@ -52,13 +52,17 @@ public class MainActivity extends AppCompatActivity {
                 User user = task.getResult().getValue(User.class);
                 if (user != null) {
                     if (user.isAdmin) {
-                        // User is admin, show "Create Team" button
-                        MenuItem createTeamButton = menu.findItem(R.id.action_create_team);
-                        createTeamButton.setVisible(true);
+                        // User is admin, show Create Team and player search items
+                        MenuItem createTeamItem = menu.findItem(R.id.action_create_team);
+                        createTeamItem.setVisible(true);
+                        MenuItem editPlayerSearchItem = menu.findItem(R.id.action_player_search);
+                        editPlayerSearchItem.setVisible(true);
                     } else {
-                        // User is not admin, hide "Create Team" button
-                        MenuItem createTeamButton = menu.findItem(R.id.action_create_team);
-                        createTeamButton.setVisible(false);
+                        // User is not admin, hide Create Team and player search items
+                        MenuItem createTeamItem = menu.findItem(R.id.action_create_team);
+                        createTeamItem.setVisible(false);
+                        MenuItem editPlayerSearchItem = menu.findItem(R.id.action_player_search);
+                        editPlayerSearchItem.setVisible(false);
                     }
                 }
             } else {

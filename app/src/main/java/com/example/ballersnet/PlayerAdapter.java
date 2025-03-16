@@ -94,7 +94,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
             playerAveragePointsTextView = itemView.findViewById(R.id.playerAveragePointsTextView);
             playerCityTextView = itemView.findViewById(R.id.playerCityTextView);
             messageButton = itemView.findViewById(R.id.messageButton);
-            isInTeamCheckTextView = itemView.findViewById(R.id.isInTeamCheckTextView);
+          //  isInTeamCheckTextView = itemView.findViewById(R.id.isInTeamCheckTextView);
 
             // Set up click listener for the CheckedTextView
             isInTeamCheckTextView.setOnClickListener(v -> {
