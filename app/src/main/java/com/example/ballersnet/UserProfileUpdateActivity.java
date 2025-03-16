@@ -35,6 +35,7 @@ public class UserProfileUpdateActivity extends MainActivity {
     // Firebase authentication and database references
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private User globalUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class UserProfileUpdateActivity extends MainActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
+                    globalUser = user;
                     // Populate UI elements with user data
                     nameEditText.setText(mAuth.getCurrentUser().getDisplayName());
                     emailEditText.setText(user.email);
@@ -112,7 +114,7 @@ public class UserProfileUpdateActivity extends MainActivity {
         boolean isTeamManager = isTeamManagerCheckBox.isChecked();
 
         // Create updated User object
-        User updatedUser = new User(userId, name, email, profilePictureUrl, "Ramat HaSharon", age, preferredPosition, averagePoints, isTeamManager, city);
+        User updatedUser = new User(userId, name, globalUser.teamName, email, profilePictureUrl,age, preferredPosition, averagePoints, isTeamManager, city);
 
         // Update user data in Firebase
         mDatabase.child("Users").child(userId).setValue(updatedUser)

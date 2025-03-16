@@ -5,13 +5,11 @@ public class User {
     public int age ;
     public double avg ;
     public boolean isAdmin ;
-    private boolean isInMyTeam;
-
 
     // Default constructor required for Firebase
     public User() {}
 
-    public User(String userId, String name, String email, String profileImage, String teamName, int age, String spot, double avg, boolean isAdmin, String city) {
+    public User(String userId, String name, String teamName, String email, String profileImage,int age, String spot, double avg, boolean isAdmin, String city) {
         this.userId = userId;
         this.name = name;
         this.teamName = teamName;
@@ -24,13 +22,8 @@ public class User {
         this.city = city ;
     }
 
+
     public User(String userId, String name, String email, String profileImage) {
-        this(userId, name, email, profileImage, "", -1, "", -1, false, "");
-    }
-    public boolean isInMyTeam() {
-        return isInMyTeam;
-    }
-    public void setInMyTeam(boolean inMyTeam) {
-        isInMyTeam = inMyTeam;
+        this(userId, name, "", email, profileImage,  -1, "", -1, false, "");
     }
 }
