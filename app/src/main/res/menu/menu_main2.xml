@@ -20,8 +20,5 @@
         android:id="@+id/activity_user_profile_update"
         android:title="Update Profile" />
 
-    <item
-        android:id="@+id/action_log_out"
-        android:title="Exit" />
 
 </menu>
