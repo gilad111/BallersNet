@@ -55,17 +55,28 @@ public class MainActivity extends AppCompatActivity {
                         // User is admin, show Create Team and player search items
                         MenuItem createTeamItem = menu.findItem(R.id.action_create_team);
                         createTeamItem.setVisible(true);
-                        MenuItem editPlayerSearchItem = menu.findItem(R.id.action_player_search);
-                        editPlayerSearchItem.setVisible(true);
+                        MenuItem PlayerSearchItem = menu.findItem(R.id.action_player_search);
+                        PlayerSearchItem.setVisible(true);
                     } else {
                         // User is not admin, hide Create Team and player search items
                         MenuItem createTeamItem = menu.findItem(R.id.action_create_team);
                         createTeamItem.setVisible(false);
-                        MenuItem editPlayerSearchItem = menu.findItem(R.id.action_player_search);
-                        editPlayerSearchItem.setVisible(false);
+                        MenuItem PlayerSearchItem = menu.findItem(R.id.action_player_search);
+                        PlayerSearchItem.setVisible(false);
                     }
                 }
-            } else {
+                // Check if user is part of a team
+                if (user.teamName == null || user.teamName.isEmpty()) {
+                    // User is not part of a team, hide Team Profile
+                    MenuItem teamProfileItem = menu.findItem(R.id.action_team_profile);
+                    teamProfileItem.setVisible(false);
+                } else {
+                    // User is part of a team, show Team Profile
+                    MenuItem teamProfileItem = menu.findItem(R.id.action_team_profile);
+                    teamProfileItem.setVisible(true);
+                }
+            }
+             else {
                 Toast.makeText(this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
