@@ -24,7 +24,7 @@ public class EditTeamProfileActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     // Team ID to edit
-    private String teamId;
+    private String teamName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class EditTeamProfileActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Get team ID from intent
-        teamId = getIntent().getStringExtra("teamId");
+        teamName = getIntent().getStringExtra("teamName");
 
         // Initialize UI elements
         initializeViews();
@@ -66,7 +66,7 @@ public class EditTeamProfileActivity extends AppCompatActivity {
 
     // Method to load team data from Firebase
     private void loadTeamData() {
-        mDatabase.child("Teams").child(teamId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Teams").child(teamName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Team team = dataSnapshot.getValue(Team.class);
@@ -94,14 +94,19 @@ public class EditTeamProfileActivity extends AppCompatActivity {
         String homeCourt = homeCourEditText.getText().toString().trim();
         int wins = Integer.parseInt(winsEditText.getText().toString().trim());
         int losses = Integer.parseInt(lossesEditText.getText().toString().trim());
-        String[] neededPositions = neededPositionsEditText.getText().toString().split(",");
+        String neededPositions = neededPositionsEditText.getText().toString();
+
+
+        if (teamName.isEmpty() || homeCourt.isEmpty() || neededPositions.isEmpty() || wins < 0 || losses < 0) {
+            Toast.makeText(EditTeamProfileActivity.this, "Please fill in all fields correctly", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Create updated Team object
-        // Team updatedTeam = new Team(teamName, homeCourt, wins, losses, "", mAuth.getCurrentUser().getDisplayName());
-        Team updatedTeam = new Team();
+        Team updatedTeam = new Team(teamName, homeCourt, wins, losses, neededPositions, mAuth.getCurrentUser().getDisplayName());
 
         // Update team data in Firebase
-        mDatabase.child("Teams").child(teamId).setValue(updatedTeam)
+        mDatabase.child("Teams").child(teamName).setValue(updatedTeam)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditTeamProfileActivity.this, "Team profile updated successfully", Toast.LENGTH_SHORT).show();
                     finish(); // Close the activity and return to TeamProfile

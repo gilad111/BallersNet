@@ -10,10 +10,8 @@ public class Team {
     public int losses = 0;
     public String neededPositions;
     public String managerName;
-    public String description;
 
-    // קונסטרקטור ברירת מחדל עבור Firebase
-    public Team() {}
+    public Team(){}
 
     public Team(String name, String homeCourtLocation, String neededPositions, String managerName) {
         this.name = name;
@@ -22,7 +20,7 @@ public class Team {
         this.managerName = managerName;
     }
 
-    public Team(String name, String homeCourtLocation, int wins, int losses, List<String> playerIds, String neededPositions, String managerName) {
+    public Team(String name, String homeCourtLocation, int wins, int losses, String neededPositions, String managerName) {
         this.name = name;
         this.homeCourtLocation = homeCourtLocation;
         this.wins = wins;

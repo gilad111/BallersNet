@@ -10,15 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.activity.EdgeToEdge;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,13 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
-// TeamProfile displays team details and inherits from AppCompatActivity
-public class TeamProfile extends MainActivity {
+public class TeamProfile extends AppCompatActivity {
     // UI components
-    private TextView teamNameTextView, homeCourtTextView, recordTextView, neededPositionsTextView, managerNameTextView;
-    private RecyclerView playersRecyclerView;
+    private TextView teamNameTextView, CourtTextView, recordTextView, neededPositionsTextView, managerNameTextView, PlayersListTextView;
     private Button editButton;
 
     // Firebase authentication and database references
@@ -41,8 +35,10 @@ public class TeamProfile extends MainActivity {
     private DatabaseReference mDatabase;
 
     // Team name and whether the user is a manager
-    private String teamName;
+    private String teamName, neededPositions, managerName, homeCourt;
     private boolean isManager = false;
+    private int wins, losses;
+    private String players = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +50,6 @@ public class TeamProfile extends MainActivity {
         toolbar.setTitle("Team Profile");
         setSupportActionBar(toolbar);
 
-
         // Initialize UI components
         initializeViews();
 
@@ -65,22 +60,18 @@ public class TeamProfile extends MainActivity {
         // Load team data
         loadTeamData();
 
-        // Enable edge-to-edge display
-        //EdgeToEdge.enable(this);
         // Show a toast message
         Toast.makeText(this, "Team Profile", Toast.LENGTH_SHORT).show();
-
-
     }
 
     // Initialize UI components
     private void initializeViews() {
         teamNameTextView = findViewById(R.id.teamNameTextView);
-        homeCourtTextView = findViewById(R.id.homeCourtLocationTextView);
+        CourtTextView = findViewById(R.id.CourtTextView);
         recordTextView = findViewById(R.id.recordTextView);
         neededPositionsTextView = findViewById(R.id.neededPositionsTextView);
         managerNameTextView = findViewById(R.id.managerNameTextView);
-        playersRecyclerView = findViewById(R.id.playersRecyclerView);
+        PlayersListTextView = findViewById(R.id.PlayersListTextView);
         editButton = findViewById(R.id.editButton);
 
         // Set click listener for the edit button
@@ -88,6 +79,7 @@ public class TeamProfile extends MainActivity {
             if (isManager) {
                 // Open edit team profile activity if user is a manager
                 Intent intent = new Intent(TeamProfile.this, EditTeamProfileActivity.class);
+                editButton.setVisibility(View.VISIBLE);
                 intent.putExtra("teamName", teamName);
                 startActivity(intent);
             } else {
@@ -119,15 +111,20 @@ public class TeamProfile extends MainActivity {
 
     // Load team details from the database
     private void loadTeamDetails(String teamName) {
-        Toast.makeText(TeamProfile.this, "Team name is " + teamName, Toast.LENGTH_SHORT).show();
         mDatabase.child("Teams").orderByChild("name").equalTo(teamName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Team team = child.getValue(Team.class);
                     if (team != null) {
-                        updateUI(team); // Update the UI with team details
+                        managerName = team.managerName;
+                        neededPositions = team.neededPositions;
+                        wins = team.wins;
+                        losses = team.losses;
+                        homeCourt = team.homeCourtLocation;
+                        loadTeamPlayers(teamName); // Load team players
                     }
+                    return;
                 }
             }
 
@@ -138,66 +135,48 @@ public class TeamProfile extends MainActivity {
         });
     }
 
-    // Update the UI with team details
-    private void updateUI(Team team) {
-        teamNameTextView.setText("Team Name: " + team.name);
-//        homeCourtTextView.setText("b");
-        recordTextView.setText("Record: " + team.wins + "-" + team.losses);
-        neededPositionsTextView.setText("Needed Positions: " + String.join(", ", team.neededPositions));
-        managerNameTextView.setText("Manager: " + team.managerName);
+    // Function to load team players
+    private void loadTeamPlayers(String teamName) {
+        players = ""; // Reset the players string
+        mDatabase.child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if (snapshot.exists()) {
+                            User user = snapshot.getValue(User.class);
+                            if (user != null && user.teamName != null) {
+                                if (user.teamName.equalsIgnoreCase(teamName)) {
+                                    players = players + user.name + "\n"; // Add the player's name
+                                }
+                            }
+                        }
+                    }
+                    // Remove the trailing newline character
+                    if (players.length() > 0 && players.charAt(players.length() - 1) == '\n') {
+                        players = players.substring(0, players.length() - 1);
+                    }
+                    updateUI(); // Update the UI here
+                } else {
+                    players = "No players found";
+                    updateUI(); // Update the UI even if no players are found
+                }
+            }
 
-        // Set up the player list adapter
-//        PlayerListAdapter adapter = new PlayerListAdapter(team.playerIds);
-//        playersRecyclerView.setAdapter(adapter);
-//        playersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(TeamProfile.this, "Failed to load users data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    // Adapter for the player list
-    private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.PlayerViewHolder> {
-        private List<String> playerIds;
-
-        PlayerListAdapter(List<String> playerIds) {
-            this.playerIds = playerIds;
-        }
-
-        @NonNull
-        @Override
-        public PlayerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
-            return new PlayerViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull PlayerViewHolder holder, int position) {
-            String playerId = playerIds.get(position);
-            mDatabase.child("Users").child(playerId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    User player = dataSnapshot.getValue(User.class);
-                    if (player != null) {
-                        holder.playerNameTextView.setText(player.name);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Handle database error
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return playerIds.size();
-        }
-
-        class PlayerViewHolder extends RecyclerView.ViewHolder {
-            TextView playerNameTextView;
-
-            PlayerViewHolder(View itemView) {
-                super(itemView);
-                playerNameTextView = itemView.findViewById(android.R.id.text1);
-            }
-        }
+    // Update the UI with team details
+    private void updateUI() {
+        teamNameTextView.setText("Team Name: " + teamName);
+        CourtTextView.setText("Home court: " + homeCourt);
+        recordTextView.setText("Record: " + wins + "-" + losses);
+        neededPositionsTextView.setText("Needed Positions: " + neededPositions);
+        managerNameTextView.setText("Manager: " + managerName);
+        PlayersListTextView.setText(players);
     }
 }
