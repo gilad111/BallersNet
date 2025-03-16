@@ -102,8 +102,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     User player = playerList.get(position);
-                    player.setInMyTeam(isInTeamCheckTextView.isChecked());
-                    playerSearch.updatePlayerTeamStatus(player.userId, player.isInMyTeam());
+                    // player.setInMyTeam(isInTeamCheckTextView.isChecked());
+                    // playerSearch.updatePlayerTeamStatus(player.userId, player.isInMyTeam());
                 }
             });
         }
@@ -121,7 +121,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         holder.messageButton.setOnClickListener(v -> messageClickListener.onMessageClick(player));
 
         // Set the checked state of the CheckedTextView
-        holder.isInTeamCheckTextView.setChecked(player.isInMyTeam());
+        // holder.isInTeamCheckTextView.setChecked(player.isInMyTeam());
     }
 
     public interface OnMessageClickListener {
