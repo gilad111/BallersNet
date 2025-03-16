@@ -100,11 +100,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-        else if (item.getItemId() == R.id.action_log_out) {
-            intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            return true;
-        }
         else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
