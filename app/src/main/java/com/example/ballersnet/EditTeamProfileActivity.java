@@ -13,7 +13,7 @@ import com.google.firebase.database.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class EditTeamProfileActivity extends AppCompatActivity {
+public class EditTeamProfileActivity extends MainActivity {
 
     // UI elements for team profile editing
     private EditText teamNameEditText, homeCourEditText, winsEditText, lossesEditText, neededPositionsEditText;
