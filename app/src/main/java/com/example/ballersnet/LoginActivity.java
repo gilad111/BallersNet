@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -64,18 +65,26 @@ public class LoginActivity extends AppCompatActivity {
                                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
-                                    // if the user doesn't have a profile, Create a new User object
-                                    if(auth.getCurrentUser().getDisplayName() == null) {
-                                        User user = new User(
-                                                userId,
-                                                auth.getCurrentUser().getDisplayName(),
-                                                auth.getCurrentUser().getEmail(),
-                                                auth.getCurrentUser().getPhotoUrl() != null ? auth.getCurrentUser().getPhotoUrl().toString() : ""
-                                        );
+                                    // Check if user already exists in Firebase Realtime Database
+                                    database.getReference("Users").child(userId).get().addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            DataSnapshot snapshot = task1.getResult();
+                                            if (!snapshot.exists()) {
+                                                // User doesn't exist, create a new User object
+                                                User user = new User(
+                                                        userId,
+                                                        auth.getCurrentUser().getDisplayName(),
+                                                        auth.getCurrentUser().getEmail(),
+                                                        auth.getCurrentUser().getPhotoUrl() != null ? auth.getCurrentUser().getPhotoUrl().toString() : ""
+                                                );
 
-                                        // Save user info to Firebase Realtime Database
-                                        database.getReference("Users").child(userId).setValue(user);
-                                    }
+                                                // Save user info to Firebase Realtime Database
+                                                database.getReference("Users").child(userId).setValue(user);
+                                            }
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Failed to check user existence", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
                                     // Load profile data
                                     Glide.with(LoginActivity.this)
@@ -95,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, "Failed to sign in: " + task.getException(), Toast.LENGTH_SHORT).show();
                                 }
                             });
+
                         } catch (ApiException e) {
                             e.printStackTrace();
                         }
