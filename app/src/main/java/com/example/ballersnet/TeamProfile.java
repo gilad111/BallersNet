@@ -86,6 +86,11 @@ public class TeamProfile extends MainActivity {
                 Toast.makeText(this, "Only team managers can edit", Toast.LENGTH_SHORT).show();
             }
         });
+        if (isManager) {
+            editButton.setVisibility(View.VISIBLE);
+        } else {
+            editButton.setVisibility(View.GONE);
+        }
     }
 
     // Load team data by first fetching the user's team name
@@ -98,6 +103,12 @@ public class TeamProfile extends MainActivity {
                 if (user != null) {
                     teamName = user.teamName; // Assuming teamName is stored in User class
                     isManager = user.isAdmin;
+                    // Set the visibility of the edit button here
+                    if (isManager) {
+                        editButton.setVisibility(View.VISIBLE);
+                    } else {
+                        editButton.setVisibility(View.GONE);
+                    }
                     loadTeamDetails(teamName); // Load team details using the team name
                 }
             }
