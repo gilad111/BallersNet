@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class CreateTeamActivity extends MainActivity {
@@ -63,21 +69,36 @@ public class CreateTeamActivity extends MainActivity {
                             String homeCourt = homeCourtEditText.getText().toString().trim();
                             String neededPositions = neededPositionsEditText.getText().toString().trim();
 
-                            // Create new Team object
-                            Team newTeam = new Team(teamName, homeCourt, neededPositions, user.name);
+                            // Check if team name is already taken
+                            mDatabase.child("Teams").orderByChild("name").equalTo(teamName).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        Toast.makeText(CreateTeamActivity.this, "Team name is already taken", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // Create new Team object
+                                        Team newTeam = new Team(teamName, homeCourt, neededPositions, user.name);
 
-                            // Generate a new unique key for the team
-                            String teamId = mDatabase.child("Teams").push().getKey();
+                                        // Generate a new unique key for the team
+                                        String teamId = mDatabase.child("Teams").push().getKey();
 
-                            // Save the team to Firebase
-                            mDatabase.child("Teams").child(teamId).setValue(newTeam)
-                                    .addOnSuccessListener(aVoid -> {
-                                        // Update user's teamId
-                                        mDatabase.child("Users").child(userId).child("teamId").setValue(teamId);
-                                        Toast.makeText(CreateTeamActivity.this, "Team created successfully", Toast.LENGTH_SHORT).show();
-                                        finish(); // Close the activity
-                                    })
-                                    .addOnFailureListener(e -> Toast.makeText(CreateTeamActivity.this, "Failed to create team", Toast.LENGTH_SHORT).show());
+                                        // Save the team to Firebase
+                                        mDatabase.child("Teams").child(teamId).setValue(newTeam)
+                                                .addOnSuccessListener(aVoid -> {
+                                                    // Update user's teamId
+                                                    mDatabase.child("Users").child(userId).child("teamId").setValue(teamId);
+                                                    Toast.makeText(CreateTeamActivity.this, "Team created successfully", Toast.LENGTH_SHORT).show();
+                                                    finish(); // Close the activity
+                                                })
+                                                .addOnFailureListener(e -> Toast.makeText(CreateTeamActivity.this, "Failed to create team", Toast.LENGTH_SHORT).show());
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Toast.makeText(CreateTeamActivity.this, "Failed to check team name", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         } else {
                             // User already has a team
                             Toast.makeText(CreateTeamActivity.this, "You already have a team", Toast.LENGTH_SHORT).show();
@@ -92,4 +113,5 @@ public class CreateTeamActivity extends MainActivity {
             }
         });
     }
+
 }
