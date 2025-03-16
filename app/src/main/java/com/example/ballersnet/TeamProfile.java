@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamProfile extends AppCompatActivity {
+public class TeamProfile extends MainActivity {
     // UI components
     private TextView teamNameTextView, CourtTextView, recordTextView, neededPositionsTextView, managerNameTextView, PlayersListTextView;
     private Button editButton;
