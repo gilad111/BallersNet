@@ -27,7 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Team Name"
-            android:inputType="text"
+            android:focusable="false"
+            android:inputType="none"
             android:layout_marginTop="16dp" />
 
         <EditText
