@@ -97,15 +97,15 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
           //  isInTeamCheckTextView = itemView.findViewById(R.id.isInTeamCheckTextView);
 
             // Set up click listener for the CheckedTextView
-            isInTeamCheckTextView.setOnClickListener(v -> {
-                isInTeamCheckTextView.toggle();
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    User player = playerList.get(position);
+           // isInTeamCheckTextView.setOnClickListener(v -> {
+            //    isInTeamCheckTextView.toggle();
+              //  int position = getAdapterPosition();
+             //   if (position != RecyclerView.NO_POSITION) {
+              //      User player = playerList.get(position);
                     // player.setInMyTeam(isInTeamCheckTextView.isChecked());
                     // playerSearch.updatePlayerTeamStatus(player.userId, player.isInMyTeam());
-                }
-            });
+             //   }
+           // });
         }
     }
 
