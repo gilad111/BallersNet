@@ -11,45 +11,56 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
-
+// TeamAdapter הוא אדפטר שמשמש לתצוגת רשימת קבוצות באמצעות RecyclerView.
 public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder> implements Filterable {
+    // רשימת הקבוצות הנוכחית
     private List<Team> teamList;
+    // רשימת הקבוצות המלאה לצורך חיפוש
     private List<Team> teamListFull;
+    // מאזין לאירוע לחיצה על כפתור הצטרפות לקבוצה
     private OnJoinTeamClickListener joinTeamClickListener;
 
+    // קונסטרקטור לאדפטר שמקבל רשימת קבוצות ומאזין לאירוע לחיצה על כפתור הצטרפות
     public TeamAdapter(List<Team> teamList, OnJoinTeamClickListener listener) {
+        // העתקת הרשימה המקורית לרשימה נוכחית ולרשימה מלאה
         this.teamList = new ArrayList<>(teamList);
         this.teamListFull = new ArrayList<>(teamList);
+// הגדרת המאזין לאירוע לחיצה על כפתור הצטרפות
         this.joinTeamClickListener = listener;
     }
-
+    // פונקציה לעדכון הרשימה הנוכחית עם רשימה חדשה של קבוצות
     public void updateList(List<Team> newList) {
+        // עדכון הרשימה הנוכחית והמלאה עם הרשימה החדשה
         this.teamList = new ArrayList<>(newList);
         this.teamListFull = new ArrayList<>(newList);
+        // הודעה לאדפטר על השינויים כדי שיעדכן את ה-RecyclerView
         notifyDataSetChanged();
     }
 
+
+    // פונקציה ליצירת תצוגה לכל פריט ברשימה
     @NonNull
     @Override
     public TeamViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // יצירת תצוגה לפריט ברשימה מתוך הלייאאוט המוגדר
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_team, parent, false);
         return new TeamViewHolder(view);
     }
 
     @Override
-    // עדכון התצוגה של כל פריט ברשימה
+    // פונקיה של עדכון התצוגה של כל פריט ברשימה
     public void onBindViewHolder(@NonNull TeamViewHolder holder, int position) {
         // קבלת הקבוצה הנוכחית מהרשימה
         Team team = teamList.get(position);
 
         // עדכון התצוגה של הקבוצה
-        holder.nameTextView.setText(team.name);
-        holder.homeCourtLocationTextView.setText("Home Court: " + team.homeCourtLocation);
-        holder.teamRecordTextView.setText("Record: " + team.wins + "-" + team.losses);
-        holder.neededPositionsTextView.setText("Needed Positions: " + String.join(", ", team.neededPositions));
+        holder.nameTextView.setText(team.name);  // הצגת שם הקבוצה
+        holder.homeCourtLocationTextView.setText("Home Court: " + team.homeCourtLocation);   // הצגת מיקום המגרש הביתי
+        holder.teamRecordTextView.setText("Record: " + team.wins + "-" + team.losses);   // הצגת המאזן של הקבוצה
+        holder.neededPositionsTextView.setText("Needed Positions: " + String.join(", ", team.neededPositions));   // הצגת עמדות הנדרשות
 
         // הגדרת מאזין לאירוע לחיצה על כפתור הצטרפות לקבוצה
-        holder.joinButton.setOnClickListener(v -> joinTeamClickListener.onJoinTeamClick(team));
+        holder.joinButton.setOnClickListener(v -> joinTeamClickListener.onJoinTeamClick(team));  // קריאה למאזין כאשר לוחצים על כפתור ההצטרפות
     }
 
     @Override
@@ -61,7 +72,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
     @Override
     // פונקציה לקבלת הפילטר של הרשימה
     public Filter getFilter() {
-        return teamFilter;
+        return teamFilter;   // החזרת הפילטר לחיפוש ברשימה
     }
     // פילטר לחיפוש ברשימה
     private Filter teamFilter = new Filter() {
@@ -88,9 +99,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
             }
             // יצירת תוצאות החיפוש
             FilterResults results = new FilterResults();
-            results.values = filteredList;
-            results.count = filteredList.size();
-            return results;
+            results.values = filteredList;  // הגדרת התוצאות
+            results.count = filteredList.size();   // הגדרת מספר התוצאות
+            return results;   // החזרת התוצאות
         }
 
         @Override
@@ -114,18 +125,16 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
         public TeamViewHolder(@NonNull View itemView) {
             super(itemView);
             // הגדרת התצוגות לפרטים של הקבוצה
-            nameTextView = itemView.findViewById(R.id.teamNameTextView);
-            homeCourtLocationTextView = itemView.findViewById(R.id.homeCourtLocationTextView);
-            teamRecordTextView = itemView.findViewById(R.id.teamRecordTextView);
-            neededPositionsTextView = itemView.findViewById(R.id.neededPositionsTextView);
+            nameTextView = itemView.findViewById(R.id.teamNameTextView);  // תצוגת שם הקבוצה
+            homeCourtLocationTextView = itemView.findViewById(R.id.homeCourtLocationTextView);  // תצוגת מיקום המגרש הביתי
+            teamRecordTextView = itemView.findViewById(R.id.teamRecordTextView);  // תצוגת המאזן של הקבוצה
+            neededPositionsTextView = itemView.findViewById(R.id.neededPositionsTextView);  // תצוגת עמדות הנדרשות
             // הגדרת הכפתור להצטרפות לקבוצה
             joinButton = itemView.findViewById(R.id.joinTeamButton);
         }
     }
 
-    // ממשק למאזין לאירוע לחיצה על כפתור הצ�
-
-
+    // ממשק למאזין לאירוע לחיצה על כפתור הצטרפות לקבוצה
     public interface OnJoinTeamClickListener {
         void onJoinTeamClick(Team team);
     }
